@@ -30,14 +30,13 @@ def predict(data):
     model_dir_path = config["webapp_model_dir"]
     model = joblib.load(model_dir_path)
     prediction = model.predict(data).tolist()[0]
-    return prediction
-    # try:
-    #     if 3 <= prediction <= 8:
-    #         return prediction
-    #     else:
-    #         raise NotInRange
-    # except NotInRange:
-    #     return "Unexpected result"
+    try:
+        if 3 <= prediction <= 8:
+            return prediction
+        else:
+            raise NotInRange
+    except NotInRange:
+        return "Unexpected result"
 
 
 def get_schema(schema_path=schema_path):
@@ -66,11 +65,11 @@ def validate_input(dict_request):
 
 
 def form_response(dict_request):
-        # if validate_input(dict_request):
-    data = dict_request.values()
-    data = [list(map(float, data))]
-    response = predict(data)
-    return response
+    if validate_input(dict_request):
+        data = dict_request.values()
+        data = [list(map(float, data))]
+        response = predict(data)
+        return response
 
 def api_response(dict_request):
     try:
